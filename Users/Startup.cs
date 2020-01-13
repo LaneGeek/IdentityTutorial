@@ -25,7 +25,8 @@ namespace Users
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IPasswordValidator<AppUser>, CustomPasswordValidator>();
-            
+            services.AddTransient<IUserValidator<AppUser>, CustomUserValidator>();
+
             services.AddDbContext<AppIdentityDbContext>(options =>
                 options.UseSqlServer(Configuration["Data:SportStoreIdentity:ConnectionString"]));
 
