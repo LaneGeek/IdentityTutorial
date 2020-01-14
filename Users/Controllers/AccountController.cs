@@ -46,5 +46,12 @@ namespace Users.Controllers
             }
             return View(details);
         }
+
+        [Authorize]
+        public async Task<IActionResult> Logout()
+        {
+            await signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
+        }
     }
 }
