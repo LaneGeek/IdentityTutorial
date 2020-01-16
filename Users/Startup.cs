@@ -27,6 +27,7 @@ namespace Users
             services.AddTransient<IUserValidator<AppUser>, CustomUserValidator>();
             services.AddSingleton<IClaimsTransformation, LocationClaimsProvider>();
             services.AddTransient<IAuthorizationHandler, BlockUsersHandler>();
+            services.AddTransient<IAuthorizationHandler, DocumentAuthorizationHandler>();
 
             services.AddAuthorization(opts =>
             {
@@ -35,9 +36,18 @@ namespace Users
                     policy.RequireRole("Users");
                     policy.RequireClaim(ClaimTypes.StateOrProvince, "DC");
                 });
-                opts.AddPolicy("NotBob", policy => {
+                opts.AddPolicy("NotBob", policy =>
+                {
                     policy.RequireAuthenticatedUser();
                     policy.AddRequirements(new BlockUsersRequirement("Bob"));
+                });
+                opts.AddPolicy("AuthorsAndEditors", policy =>
+                {
+                    policy.AddRequirements(new DocumentAuthorizationRequirement
+                    {
+                        AllowAuthors = true,
+                        AllowEditors = true
+                    });
                 });
             });
 
