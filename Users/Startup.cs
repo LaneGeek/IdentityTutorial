@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Users.Infrastructure;
 using Users.Models;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Users
 {
@@ -26,6 +27,7 @@ namespace Users
         {
             services.AddTransient<IPasswordValidator<AppUser>, CustomPasswordValidator>();
             services.AddTransient<IUserValidator<AppUser>, CustomUserValidator>();
+            services.AddSingleton<IClaimsTransformation, LocationClaimsProvider>();
 
             services.AddDbContext<AppIdentityDbContext>(options =>
                 options.UseSqlServer(Configuration["Data:SportStoreIdentity:ConnectionString"]));
